@@ -34,6 +34,10 @@ if not os.path.exists("slides"):
 # -----------------------------
 cap = cv2.VideoCapture(video_file)
 
+if not cap.isOpened():
+    print(f"Error: Could not open video file '{video_file}'")
+    exit()
+
 prev_frame = None
 count = 0
 
