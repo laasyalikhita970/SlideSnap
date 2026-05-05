@@ -10,7 +10,6 @@ url = input("Enter YouTube URL: ")
 download_video(url)
 
 # find downloaded file
-import os
 video_file = None
 
 for file in os.listdir():
