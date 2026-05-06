@@ -7,4 +7,5 @@ def download_video(url):
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
+        info = ydl.extract_info(url, download=True)
+        return ydl.prepare_filename(info)

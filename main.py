@@ -9,17 +9,16 @@ from downloader import download_video
 url = input("Enter YouTube URL: ")
 download_video(url)
 
-# find downloaded file
-video_file = None
+# download and find downloaded file
+try:
+    video_file = download_video(url)
+except Exception as exc:
+    print("Download failed:", exc)
+    exit(1)
 
-for file in os.listdir():
-    if file.startswith("video"):
-        video_file = file
-        break
-
-if video_file is None:
-    print("Video not found!")
-    exit()
+if not video_file or not os.path.exists(video_file):
+    print("Video not found after download!")
+    exit(1)
 
 print("Processing:", video_file)
 

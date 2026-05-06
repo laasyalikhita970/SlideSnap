@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+video.mp4
+sample.mp4
+slides/
