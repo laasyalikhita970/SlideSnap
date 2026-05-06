@@ -2,6 +2,18 @@ import cv2
 import numpy as np
 import os
 import shutil
+import stat
+import time
+
+
+def on_rm_error(func, path, exc_info):
+    import errno
+    exc_type, exc_value = exc_info[:2]
+    if exc_type is PermissionError or exc_value.errno in (errno.EACCES, errno.EPERM):
+        os.chmod(path, stat.S_IWRITE)
+        func(path)
+    else:
+        raise
 
 
 def frame_hash(gray, size=(16, 16)):
@@ -12,7 +24,12 @@ def frame_hash(gray, size=(16, 16)):
 
 def process_video(video_file=None):
     if os.path.exists("slides"):
-        shutil.rmtree("slides")
+        try:
+            shutil.rmtree("slides", onerror=on_rm_error)
+        except PermissionError:
+            print("⚠️ Slides folder in use, retrying...")
+            time.sleep(1)
+            shutil.rmtree("slides", onerror=on_rm_error)
 
     if video_file is None:
         for file in os.listdir():
@@ -40,13 +57,16 @@ def process_video(video_file=None):
     prev_frame = None
     last_saved = None
     last_saved_hash = None
+    last_saved_frame_id = 0
     count = 0
 
     # Tuning values (based on your testing)
     threshold = 600000
     slide_threshold = 300000
+    min_gap = 60
     frame_skip = 30
     frame_id = 0
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     while True:
         ret, frame = cap.read()
@@ -57,6 +77,9 @@ def process_video(video_file=None):
         if frame_id % frame_skip != 0:
             continue
 
+        if frame_id % 300 == 0:
+            print(f"Processing: {frame_id}/{total_frames}")
+
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
@@ -65,6 +88,10 @@ def process_video(video_file=None):
             score = np.sum(diff)
             if score > threshold:
                 if last_saved is not None:
+                    if frame_id - last_saved_frame_id < min_gap:
+                        prev_frame = gray
+                        continue
+
                     slide_diff = cv2.absdiff(last_saved, gray)
                     slide_score = np.sum(slide_diff)
                     if slide_score < slide_threshold:
@@ -84,11 +111,15 @@ def process_video(video_file=None):
 
                 last_saved = gray.copy()
                 last_saved_hash = frame_hash(gray)
+                last_saved_frame_id = frame_id
                 count += 1
 
         prev_frame = gray
 
     cap.release()
+
+    if count == 0:
+        print("⚠️ No slides detected. Try another video.")
 
     print("\n✅ Slides extraction complete!")
     print(f"Total slides saved: {count}")

@@ -7,7 +7,8 @@ def download_video(url):
         'format': 'best[ext=mp4]/best',
         'noplaylist': True,
         'quiet': True,
-        'js_runtimes': ['node'],
+        'remote_components': 'ejs:github',
+        'js_runtimes': {'node': {}},
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:

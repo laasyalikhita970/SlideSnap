@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from downloader import download_video
 from pdf_converter import images_to_pdf
@@ -23,7 +24,12 @@ def run_process():
         return
 
     set_status("🎥 Extracting slides...")
-    result = main.process_video(video_file)
+    try:
+        result = main.process_video(video_file)
+    except Exception as exc:
+        set_status(f"❌ Extraction error: {exc}")
+        return
+
     if result != 0:
         set_status("❌ Extraction failed.")
         return
@@ -36,6 +42,10 @@ def run_process():
         return
 
     set_status("✅ Done! Check slides folder")
+    try:
+        os.startfile("slides")
+    except Exception:
+        pass
 
 def start():
     url = entry.get().strip()
