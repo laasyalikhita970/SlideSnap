@@ -1,83 +1,80 @@
 import cv2
 import numpy as np
 import os
-from downloader import download_video
+import shutil
 
-# -----------------------------
-# 1. Input video file
-# -----------------------------
-url = input("Enter YouTube URL: ")
-download_video(url)
 
-# download and find downloaded file
-try:
-    video_file = download_video(url)
-except Exception as exc:
-    print("Download failed:", exc)
-    exit(1)
+def process_video(video_file=None):
+    if os.path.exists("slides"):
+        shutil.rmtree("slides")
 
-if not video_file or not os.path.exists(video_file):
-    print("Video not found after download!")
-    exit(1)
+    if video_file is None:
+        for file in os.listdir():
+            if file.startswith("video") and (file.endswith(".mp4") or file.endswith(".webm")):
+                video_file = file
+                break
 
-print("Processing:", video_file)
+        if video_file is None:
+            print("❌ Video file not found!")
+            return 1
 
-# -----------------------------
-# 2. Create slides folder
-# -----------------------------
-if not os.path.exists("slides"):
-    os.makedirs("slides")
+    if not os.path.exists(video_file):
+        print(f"Video file not found: {video_file}")
+        return 1
 
-# -----------------------------
-# 3. Open video
-# -----------------------------
-cap = cv2.VideoCapture(video_file)
+    print("Processing:", video_file)
 
-if not cap.isOpened():
-    print(f"Error: Could not open video file '{video_file}'")
-    exit()
+    os.makedirs("slides", exist_ok=True)
 
-prev_frame = None
-count = 0
+    cap = cv2.VideoCapture(video_file)
+    if not cap.isOpened():
+        print(f"Error: Could not open video file '{video_file}'")
+        return 1
 
-# Tuning values (based on your testing)
-threshold = 600000
-frame_skip = 30
-frame_id = 0
+    prev_frame = None
+    last_saved = None
+    count = 0
 
-# -----------------------------
-# 4. Process video
-# -----------------------------
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+    # Tuning values (based on your testing)
+    threshold = 600000
+    frame_skip = 30
+    frame_id = 0
 
-    frame_id += 1
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    # Skip frames for speed
-    if frame_id % frame_skip != 0:
-        continue
+        frame_id += 1
+        if frame_id % frame_skip != 0:
+            continue
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # Blur to reduce noise
-    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+        if prev_frame is not None:
+            diff = cv2.absdiff(prev_frame, gray)
+            score = np.sum(diff)
+            if score > threshold:
+                if last_saved is not None:
+                    slide_diff = cv2.absdiff(last_saved, gray)
+                    slide_score = np.sum(slide_diff)
+                    if slide_score < 300000:
+                        prev_frame = gray
+                        continue
 
-    if prev_frame is not None:
-        diff = cv2.absdiff(prev_frame, gray)
-        score = np.sum(diff)
+                filename = f"slides/slide_{count}.jpg"
+                cv2.imwrite(filename, frame)
+                print(f"Saved: {filename}")
 
-        # Detect slide change
-        if score > threshold:
-            filename = f"slides/slide_{count}.jpg"
-            cv2.imwrite(filename, frame)
-            print(f"Saved: {filename}")
-            count += 1
+                last_saved = gray.copy()
+                count += 1
 
-    prev_frame = gray
+        prev_frame = gray
 
-cap.release()
+    cap.release()
 
-print("\n✅ Slides extraction complete!")
-print(f"Total slides saved: {count}")
+    print("\n✅ Slides extraction complete!")
+    print(f"Total slides saved: {count}")
+
+    return 0
