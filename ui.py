@@ -29,7 +29,11 @@ def run_process():
         return
 
     set_status("📄 Creating PDF...")
-    images_to_pdf()
+    try:
+        images_to_pdf()
+    except Exception as exc:
+        set_status(f"❌ PDF creation failed: {exc}")
+        return
 
     set_status("✅ Done! Check slides folder")
 
@@ -40,7 +44,7 @@ def start():
         return
 
     # run in separate thread so UI doesn't freeze
-    threading.Thread(target=run_process).start()
+    threading.Thread(target=run_process, daemon=True).start()
 
 # GUI window
 root = tk.Tk()
