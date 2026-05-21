@@ -22,7 +22,7 @@ def frame_hash(gray, size=(16, 16)):
     return (small > mean).astype(np.uint8).flatten()
 
 
-def process_video(video_file=None):
+def process_video(video_file=None, thumbnail_callback=None):
     if os.path.exists("slides"):
         try:
             shutil.rmtree("slides", onerror=on_rm_error)
@@ -108,6 +108,9 @@ def process_video(video_file=None):
                 filename = f"slides/slide_{count}.jpg"
                 cv2.imwrite(filename, frame)
                 print(f"Saved: {filename}")
+
+                if thumbnail_callback:
+                    thumbnail_callback(filename)
 
                 last_saved = gray.copy()
                 last_saved_hash = frame_hash(gray)
