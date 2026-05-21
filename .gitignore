@@ -1,8 +1,5 @@
-__pycache__/
-*.pyc
 .venv/
-video.mp4
-video.webm
-sample.mp4
+__pycache__/
 slides/
-slides.pdf
+*.pdf
+video.*
