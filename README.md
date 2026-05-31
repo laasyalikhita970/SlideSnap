@@ -1,187 +1,153 @@
-# SlideSnap
+# 📑 SlideSnap
 
-SlideSnap is a Python-based desktop application that automatically extracts presentation slides from YouTube videos using Computer Vision techniques. The application detects slide changes, removes duplicate frames, and generates a clean PDF containing the extracted slides.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green)
+![Tkinter](https://img.shields.io/badge/GUI-Tkinter-orange)
+
+SlideSnap is a Python-based desktop application that automatically extracts presentation slides from YouTube videos using Computer Vision techniques. It detects slide transitions, removes duplicate frames using image hashing, and generates a clean PDF of extracted slides for easy revision.
 
 ---
 
-## Features
+## 🎯 Features
 
-- Download YouTube videos using yt-dlp
-- Extract slides from videos using OpenCV
-- Detect slide transitions automatically
-- Remove duplicate or near-identical slides
-- Generate PDF from extracted slides
+- Download YouTube videos using `yt-dlp`
+- Extract frames using OpenCV
+- Detect slide transitions using frame difference analysis
+- Remove duplicate or near-duplicate slides using image hashing
+- Generate structured PDF from extracted slides
 - Simple desktop GUI using Tkinter
-- Automatic slide folder generation
-- Frame difference based slide detection
-- Duplicate filtering using image hashing
+- Automatic slide folder creation
+- Optimized frame processing for better performance
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - Python
 - OpenCV
 - NumPy
-- Tkinter
-- Pillow
+- Pillow (PIL)
 - yt-dlp
+- Tkinter
 
 ---
 
-## Project Structure
+## 📸 Demo
 
-```plaintext
+![SlideSnap Demo](assets/demo.gif)
+
+---
+
+## 📁 Project Structure
+
 SlideSnap/
 │
 ├── ui.py
 ├── main.py
 ├── downloader.py
 ├── pdf_converter.py
-├── README.md
 │
 ├── slides/
-│   ├── slide_0.jpg
-│   ├── slide_1.jpg
-│   └── ...
-│
 ├── slides.pdf
-└── .venv/
-```
+├── requirements.txt
+└── README.md
 
 ---
 
-## Installation
+## ⚙️ Installation
 
-### 1. Clone Repository
+### 1. Clone the repository
 
-```bash
-git clone https://github.com/your-username/slidesnap.git
-cd slidesnap
-```
+git clone https://github.com/your-username/SlideSnap.git  
+cd SlideSnap  
 
 ---
 
-### 2. Create Virtual Environment
+### 2. Create virtual environment
 
-```bash
-python -m venv .venv
-```
+python -m venv .venv  
 
 ---
 
-### 3. Activate Virtual Environment
+### 3. Activate environment
 
-#### Windows
+Windows  
+.venv\Scripts\activate  
 
-```bash
-.venv\Scripts\activate
-```
-
-#### Mac/Linux
-
-```bash
-source .venv/bin/activate
-```
+Mac/Linux  
+source .venv/bin/activate  
 
 ---
 
-### 4. Install Dependencies
+### 4. Install dependencies
 
-```bash
-pip install opencv-python numpy pillow yt-dlp
-```
+pip install -r requirements.txt  
 
 ---
 
-## Run the Application
+## 🚀 Run the Project
 
-```bash
-python ui.py
-```
+python ui.py  
 
 ---
 
-## How It Works
+## 🧠 How It Works
 
-1. User enters a YouTube video URL
-2. yt-dlp downloads the video locally
-3. OpenCV processes the video frame-by-frame
-4. Consecutive frames are compared
-5. Large visual differences are treated as slide transitions
-6. Duplicate slides are filtered using image comparison and hashing
-7. Slides are saved inside the `slides/` folder
-8. Extracted slides are converted into a PDF
-
----
-
-## Output
-
-### Extracted Slides
-
-```plaintext
-slides/
-```
-
-### Generated PDF
-
-```plaintext
-slides.pdf
-```
+- User enters a YouTube video URL  
+- Video is downloaded using yt-dlp  
+- OpenCV processes video frame-by-frame  
+- Frame differences detect slide transitions  
+- Duplicate frames are removed using hashing  
+- Unique slides are saved in /slides folder  
+- Slides are converted into a PDF  
 
 ---
 
-## Example Workflow
+## 📊 Workflow
 
-```plaintext
-YouTube URL
-      ↓
-Video Download
-      ↓
-Frame Processing
-      ↓
-Slide Detection
-      ↓
-Duplicate Removal
-      ↓
-PDF Generation
-```
-
----
-
-## Future Improvements
-
-- Support for local video file upload
-- OCR text extraction from slides
-- Improved UI design
-- AI-based slide detection
-- Web application version
-- Export slides as PowerPoint
+YouTube URL  
+↓  
+Video Download  
+↓  
+Frame Extraction  
+↓  
+Slide Detection  
+↓  
+Duplicate Removal  
+↓  
+PDF Generation  
+↓  
+Final Output  
 
 ---
 
-## Challenges Faced
+## 🚧 Challenges Faced
 
-- Detecting meaningful slide transitions
-- Removing duplicate slides
-- Handling YouTube download restrictions
-- Optimizing frame processing speed
-
----
-
-## Learning Outcomes
-
-Through this project, I learned:
-
-- Computer Vision basics using OpenCV
-- Video frame processing
-- Image comparison techniques
-- GUI development with Tkinter
-- File handling in Python
-- PDF generation using Pillow
+- Detecting meaningful slide transitions accurately  
+- Removing duplicate frames  
+- Handling long videos efficiently  
+- Optimizing processing speed  
+- Managing video downloads reliably  
 
 ---
 
-## Author
+## 📈 Future Improvements
 
-Developed by Laasya Likhita
+- OCR-based text extraction from slides  
+- Web application version  
+- AI-based slide importance ranking  
+- Support for local video uploads  
+- Export to PowerPoint (.pptx)  
+- Cloud deployment  
+
+---
+
+## 👨‍💻 Author
+
+**Laasya Likhita**
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
