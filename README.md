@@ -32,28 +32,6 @@ SlideSnap is a Python-based desktop application that automatically extracts pres
 
 ---
 
-## 📸 Demo
-
-![SlideSnap Demo](assets/demo.gif)
-
----
-
-## 📁 Project Structure
-
-SlideSnap/
-│
-├── ui.py
-├── main.py
-├── downloader.py
-├── pdf_converter.py
-│
-├── slides/
-├── slides.pdf
-├── requirements.txt
-└── README.md
-
----
-
 ## ⚙️ Installation
 
 ### 1. Clone the repository
@@ -94,40 +72,12 @@ python ui.py
 ## 🧠 How It Works
 
 - User enters a YouTube video URL  
-- Video is downloaded using yt-dlp  
+- Video is downloaded using `yt-dlp`  
 - OpenCV processes video frame-by-frame  
 - Frame differences detect slide transitions  
 - Duplicate frames are removed using hashing  
-- Unique slides are saved in /slides folder  
+- Unique slides are saved in `/slides` folder  
 - Slides are converted into a PDF  
-
----
-
-## 📊 Workflow
-
-YouTube URL  
-↓  
-Video Download  
-↓  
-Frame Extraction  
-↓  
-Slide Detection  
-↓  
-Duplicate Removal  
-↓  
-PDF Generation  
-↓  
-Final Output  
-
----
-
-## 🚧 Challenges Faced
-
-- Detecting meaningful slide transitions accurately  
-- Removing duplicate frames  
-- Handling long videos efficiently  
-- Optimizing processing speed  
-- Managing video downloads reliably  
 
 ---
 
@@ -139,15 +89,3 @@ Final Output
 - Support for local video uploads  
 - Export to PowerPoint (.pptx)  
 - Cloud deployment  
-
----
-
-## 👨‍💻 Author
-
-**Laasya Likhita**
-
----
-
-## ⭐ Support
-
-If you like this project, give it a ⭐ on GitHub!
