@@ -1,6 +1,5 @@
 .venv/
 __pycache__/
-*.pyc
 slides/
-slides.pdf
-.env
+*.pdf
+*.mp4
